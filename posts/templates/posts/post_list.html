@@ -1,0 +1,33 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Posts List{% endblock %}
+
+{% block content %}
+    <h2>Posts</h2>
+    
+    <div class="search-form">
+        <form method="GET" action="{% url 'post_list' %}">
+            <input type="text" name="q" placeholder="Search posts..." value="{{ request.GET.q }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post">
+                <h3><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
+                <p>{{ post.content|truncatewords:30 }}</p>
+                <small>Created: {{ post.created_at|date:"F d, Y" }}</small>
+                <div>
+                    <a href="{% url 'post_detail' post.id %}" class="btn">Read More</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No posts found.</p>
+    {% endif %}
+    
+    <div>
+        <a href="{% url 'admin:posts_post_add' %}" class="btn">Add New Post</a>
+    </div>
+{% endblock %}
